@@ -92,9 +92,9 @@ szUciResponse:
 szGreeting:
 	db VERSION_PRE
 	db VERSION_OS
-	db '_'
+	db '-'
 	create_build_time DAY, MONTH, YEAR
-	db '_'
+	db '-'
 	db VERSION_POST
 	NewLineData
 szGreetingEnd:

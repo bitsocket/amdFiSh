@@ -427,9 +427,9 @@ common
 
 macro create_build_time day, month, year {
 common
-  num_to_db year, 4
-  db '-'
+  num_to_db year, 2
+  db ''
   num_to_db month, 2
-  db '-'
+  db ''
   num_to_db day, 2
 }
