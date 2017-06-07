@@ -27,13 +27,13 @@ end if
 include 'Def.asm'
 
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 format PE64 console
 stack THREAD_STACK_SIZE
 entry Start
 include 'myWin64a.asm'
 }
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 format ELF64 executable 3
 entry Start
 include 'linux64.asm'
@@ -46,10 +46,10 @@ include 'Structs.asm'
 include 'Debug.asm'
 
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 section '.data' data readable writeable
 }
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 segment readable writeable
 }
 
@@ -313,7 +313,7 @@ BenchFens: ;fens must be separated by one or more space char
 .bench_fen36 db "8/R7/2q5/8/6k1/8/1P5p/K6R w - - 0 124"  ; Draw
 BenchFensEnd: db 0
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
  sz_kernel32			      db 'kernel32',0
  sz_Advapi32dll 		      db 'Advapi32.dll',0
  sz_VirtualAllocExNuma		      db 'VirtualAllocExNuma',0
@@ -333,7 +333,7 @@ align 8
  __imp_GetLogicalProcessorInformationEx dq ?
 }
 
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
  sz_procselfauxv		db '/proc/self/auxv',0
  sz___vdso_clock_gettime	db '__vdso_clock_gettime',0
 align 8
@@ -355,10 +355,10 @@ align 16
 
 ;;; this section contains engine data that changes
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 section '.rdata' data readable writeable
 }
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 segment readable writeable
 }
 
@@ -399,10 +399,10 @@ align 16
 ;
 ; todo: see if the order/alignment of these variables affects performance
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 section '.bss' data readable writeable
 }
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 segment readable writeable
 }
 
@@ -520,10 +520,10 @@ PushAway                   rb 8
 
 ;;;; make a section for tb   todo: this should be merged with previous two sections
 match =1, USE_SYZYGY {
- match ='W', VERSION_OS \{
+ match ='64', VERSION_OS \{
   section '.tb' data readable writeable
  \}
- match ='L', VERSION_OS \{
+ match ='X', VERSION_OS \{
  segment readable writeable
  \}
  include 'TablebaseData.asm'
@@ -533,10 +533,10 @@ match =1, USE_SYZYGY {
 
 ;;;;;;; code section !!! ;;;;;;;;;;
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 section '.code' code readable executable
 }
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 segment readable executable
 }
 
@@ -643,10 +643,10 @@ include 'Search_Clear.asm'
 include 'PrintParse.asm'
 include 'Math.asm'
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 include 'OsWindows.asm'
 }
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 include 'OsLinux.asm'
 }
 
@@ -657,7 +657,7 @@ end if
 
 Start:
 
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 		mov   qword[rspEntry], rsp
 }
 		and   rsp, -16
@@ -771,10 +771,10 @@ DisplayProfileData:
 
 
 ; we also need a data section to keep track of the counts
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 section '.profile' data readable writeable
 }
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 segment readable writeable
 }
 
@@ -788,7 +788,7 @@ end if
 ; windows hides its syscall numbers and changes them from version to version
 ; so we have no choice but to link with kernel32.dll, which can be assumed to be loaded automatically
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 
 section '.idata' import data readable writeable
 

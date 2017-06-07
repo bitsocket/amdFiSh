@@ -270,7 +270,7 @@ end if
 		 jz   .loop
 .exit:
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 		xor   ecx, ecx
 	       call   _ExitThread
 }

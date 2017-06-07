@@ -1,4 +1,4 @@
-VERSION_OS	 fix 'W'
+VERSION_OS	 fix '64'
 VERSION_PRE	 fix 'amdFiSh'
 VERSION_POST	 fix 'popcnt'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

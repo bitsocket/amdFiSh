@@ -312,7 +312,7 @@ end virtual
 ;                sbb   eax, eax
 ;                xor   edx, 0111000b  ;
 ;                add   edx, 1
-;                and   eax, 'X'-'.'
+;                and   eax, '64'-'.'
 ;                add   eax, '. ' + (10 shl 16)
 ;              stosd
 ;                mov   eax, edx

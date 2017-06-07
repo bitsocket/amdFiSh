@@ -29,14 +29,14 @@ end if
 
 
 macro NewLineData {
-match ='W', VERSION_OS \{
+match ='64', VERSION_OS \{
 	db 13
 \}
 	db 10
 }
 
 macro PrintNewLine {
-match ='W', VERSION_OS \{
+match ='64', VERSION_OS \{
 		mov   al, 13
 	      stosb
 \}

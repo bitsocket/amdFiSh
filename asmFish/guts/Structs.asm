@@ -301,7 +301,7 @@ ends
 ; thread structures
 ;;;;;;;;;;;;;;;;;;;;
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 
   struct ThreadHandle
    handle   rq 1
@@ -317,7 +317,7 @@ match ='W', VERSION_OS {
 
 
 }
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 
   struct ThreadHandle
    stackAddress rq 1
@@ -391,7 +391,7 @@ if Thread.rootPos and 15
 end if
 
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 ; windows uses the concept of processor groups
 ;  each node is in one group and has a cpu mask associated with it
 ; the WinNumaNode struct is used by GetLogicalProcessorInformationEx
@@ -421,7 +421,7 @@ struct NumaNode
 ends
 
 }
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 ; on linux, cpu data is held in a large bit mask
 
 struct NumaNode

@@ -26,11 +26,11 @@ PAWN_HASH_ENTRY_COUNT equ 16384 	; should be a power of 2
 MATERIAL_HASH_ENTRY_COUNT equ 8192	; should be a power of 2
 
 
-match ='W', VERSION_OS {
+match ='64', VERSION_OS {
 SEP_CHAR equ ';'
 }
 
-match ='L', VERSION_OS {
+match ='X', VERSION_OS {
 SEP_CHAR equ ':'
 }
 
