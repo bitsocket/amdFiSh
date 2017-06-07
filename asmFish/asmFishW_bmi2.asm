@@ -1,5 +1,5 @@
 VERSION_OS	 fix 'W'
-VERSION_PRE	 fix 'asmFish'
+VERSION_PRE	 fix 'amdFiSh'
 VERSION_POST	 fix 'bmi2'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; cpu options 0 or 1
@@ -20,7 +20,7 @@ USE_MATEFINDER	 equ 0	; less pruning
 USE_CURRMOVE	 equ 1	; printing feature, spamlike
 USE_HASHFULL	 equ 1	; printing feature
 USE_SELDEPTH	 equ 1	; printing feature
-USE_SPAMFILTER	 equ 0	; arena gui can't read at a rate > 1 line / 15ms
+USE_SPAMFILTER	 equ 1	; arena gui can't read at a rate > 1 line / 15ms
 USE_SYZYGY	 equ 1	; include tablebase probing code
 USE_BOOK	 equ 0	; include some book functions
 USE_WEAKNESS	 equ 0	; include uci_limitstrength and uci_elo
