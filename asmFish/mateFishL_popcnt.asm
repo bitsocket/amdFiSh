@@ -1,6 +1,6 @@
 VERSION_OS	 fix 'X'
 VERSION_PRE	 fix 'mateFish'
-VERSION_POST	 fix 'popcnt'
+VERSION_POST	 fix 'POP'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; cpu options 0 or 1
 CPU_HAS_POPCNT	 equ 1	;  popcnt                       very nice function

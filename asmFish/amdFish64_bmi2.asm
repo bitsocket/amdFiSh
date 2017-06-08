@@ -1,6 +1,6 @@
 VERSION_OS	 fix '64'
 VERSION_PRE	 fix 'amdFiSh'
-VERSION_POST	 fix 'bmi2'
+VERSION_POST	 fix 'BMI2'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; cpu options 0 or 1
 CPU_HAS_POPCNT	 equ 1	;  popcnt                       very nice function

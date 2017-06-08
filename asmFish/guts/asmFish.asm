@@ -92,10 +92,10 @@ szUciResponse:
 szGreeting:
 	db VERSION_PRE
 	db VERSION_OS
-	db '-'
-	create_build_time DAY, MONTH, YEAR
-	db '-'
+	db ' '
 	db VERSION_POST
+	db ' '
+	create_build_time DAY, MONTH, YEAR
 	NewLineData
 szGreetingEnd:
 	db 'id author Zodiac'
