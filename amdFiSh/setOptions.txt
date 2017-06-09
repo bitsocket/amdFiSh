@@ -1,0 +1,19 @@
+###########################################################################
+cd D:\Chess\Engines\MyFavouriteEngines\Stockfish-SE
+---
+Stockfish-SE_160924_popcnt.exe
+Stockfish-SE_2016-09-28_popcnt
+setoption name SyzygyPath value D:\SYZYGY\wdl345;D:\SYZYGY\dtz345
+info string found 145 tablebases
+setoption name SyzygyProbeLimit value 5
+setoption name SyzygyProbeDepth value 2
+setoption name Syzygy50MoveRule value true
+setoption name NodeAffinity value 0.1 2.3 4.5 6.7
+setoption name Hash value 512
+setoption name LargePages value true
+---
+isready
+
+info string hash set to 512 MB no large pages
+
+###########################################################################
