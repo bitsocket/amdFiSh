@@ -1,5 +1,5 @@
 VERSION_OS	 fix '64'
-VERSION_PRE	 fix 'amdFiSh'
+VERSION_PRE	 fix 'amdFish'
 VERSION_POST	 fix 'POP'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; cpu options 0 or 1

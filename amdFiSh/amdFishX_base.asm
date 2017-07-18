@@ -1,5 +1,5 @@
 VERSION_OS	 fix 'X'
-VERSION_PRE	 fix 'amdFiSh'
+VERSION_PRE	 fix 'amdFish'
 VERSION_POST	 fix 'BASE'
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; cpu options 0 or 1
