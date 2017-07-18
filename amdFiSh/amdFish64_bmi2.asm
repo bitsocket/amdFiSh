@@ -15,7 +15,6 @@ VERBOSE 	 equ 0	;  LOTS of print           find subtle bugs:  0=off, 1=general d
 PROFILE 	 equ 0	;  counts in the code      view these with profile command after running bench
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; optional features 0 or 1
-PEDANTIC	 equ 1	;  follow official stockfish exactly so that bench signature matches
 USE_MATEFINDER	 equ 0	; less pruning
 USE_CURRMOVE	 equ 1	; printing feature, spamlike
 USE_HASHFULL	 equ 1	; printing feature
@@ -24,6 +23,7 @@ USE_SPAMFILTER	 equ 1	; arena gui can't read at a rate > 1 line / 15ms
 USE_SYZYGY	 equ 1	; include tablebase probing code
 USE_BOOK	 equ 0	; include some book functions
 USE_WEAKNESS	 equ 0	; include uci_limitstrength and uci_elo
+USE_VARIETY      equ 0  ; add noise to qsearch return value
 USE_CMDLINEQUIT  equ 1	; after processing command line, should we quit?
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 include 'guts/asmFish.asm'
