@@ -176,24 +176,7 @@ end virtual
 		mov   rdx, rsi
 	       call   Limits_Copy
 
-	; copy to mainThread
-
-if PEDANTIC
-	; position is passed to threads by first converting to a fen
-	;   and then parsing this fen string
-	; the net effect is a fixed order on piece lists
-	       call   Position_SetPieceLists
-end if
-
-		lea   rcx, [r14+Thread.rootPos]
-	       call   Position_CopyToSearch
-		xor   eax, eax
-		mov   dword[r14+Thread.rootDepth], eax
-		mov   qword[r14+Thread.nodes], rax
-		mov   qword[r14+Thread.tbHits], rax
-		mov   byte[r14+Thread.maxPly], al
-                mov   dword[r14+Thread.resetCnt], eax
-                mov   dword[r14+Thread.callsCnt], MIN_RESETCNT  ; check time asap
+        ; first, get root moves from gui position
 
 		lea   rsi, [limits.moveVec]
 		lea   rdi, [.moveList]
@@ -216,9 +199,29 @@ end if
 		jmp   .push_moves
     .push_moves_done:
 
-	; the main thread should get the position for tb move filtering
+	; next, copy to mainThread
+
+		xor   eax, eax
+		mov   dword[r14+Thread.rootDepth], eax
+		mov   qword[r14+Thread.nodes], rax
+		mov   qword[r14+Thread.tbHits], rax
+		mov   byte[r14+Thread.maxPly], al
+                mov   dword[r14+Thread.resetCnt], eax
+                mov   dword[r14+Thread.callsCnt], MIN_RESETCNT  ; check time asap
+		lea   rcx, [r14+Thread.rootPos]
+	       call   Position_CopyToSearch
+
+        ; switch rbp and rbx to position of main thread
+
 		lea   rbp, [r14+Thread.rootPos]
 		mov   rbx, qword[rbp+Pos.state]
+
+        ; since gui thread does not have a rootmoves vector
+        ;   do filtering of tb moves in the main thread
+        ; this behavior will not necessarily match official stockfish if
+        ;   tbs are being used
+        ;   and multiple go commands are issued after a position command
+        ; however, tb probing code is not functionally identical anyways
 
 if USE_SYZYGY
 	; Skip TB probing when no TB found
@@ -247,34 +250,42 @@ if USE_SYZYGY
 .check_tb_ret:
 end if
 
-	; copy original position to workers
+	; position is passed to threads by first converting to a fen
+	;   and then parsing this fen string
+	; the net effect is a fixed order on piece lists
+
+	       call   Position_SetPieceLists
+
+
+	; copy position in main thread to workers
+
 		xor   eax, eax
-		mov   rbp, r15
-		mov   rsi, r14
-		mov   qword[rsi+Thread.nodes], rax  ;filtering moves may have incremented mainThread.nodes
+                mov   qword[r14+Thread.nodes], rax  ;filtering moves may have incremented mainThread.nodes
 		xor   edi, edi
 .next_thread:
 		add   edi,1
 		cmp   edi, dword[threadPool.threadCnt]
 		jae   .thread_copy_done
-		mov   rbx, qword[threadPool.threadTable+8*rdi]
 
-		lea   rcx, [rbx+Thread.rootPos]
+        ; get address of worker thread
+		mov   rsi, qword[threadPool.threadTable+8*rdi]
+
+		lea   rcx, [rsi+Thread.rootPos]
 	       call   Position_CopyToSearch
 		xor   eax, eax
-		mov   dword[rbx+Thread.rootDepth], eax
-		mov   qword[rbx+Thread.nodes], rax
-		mov   qword[rbx+Thread.tbHits], rax
-		mov   byte[rbx+Thread.maxPly], al
-                mov   dword[r14+Thread.resetCnt], eax
-                mov   dword[r14+Thread.callsCnt], MAX_RESETCNT  ; main thread already has min
+		mov   dword[rsi+Thread.rootDepth], eax
+		mov   qword[rsi+Thread.nodes], rax
+		mov   qword[rsi+Thread.tbHits], rax
+		mov   byte[rsi+Thread.maxPly], al
+                mov   dword[rsi+Thread.resetCnt], eax
+                mov   dword[rsi+Thread.callsCnt], MAX_RESETCNT  ; main thread already has min
 
 
 	; copy the filtered moves of main thread to worker thread
-		mov   rax, qword[rbx+Thread.rootPos.rootMovesVec.table]
-		mov   rdx, qword[rsi+Thread.rootPos.rootMovesVec.table]
+		mov   rax, qword[rsi+Thread.rootPos.rootMovesVec.table]
+		mov   rdx, qword[r14+Thread.rootPos.rootMovesVec.table]
 .copy_moves_loop:
-		cmp   rdx, qword[rsi+Thread.rootPos.rootMovesVec.ender]
+		cmp   rdx, qword[r14+Thread.rootPos.rootMovesVec.ender]
 		jae   .copy_moves_done
 	    vmovups   xmm0, dqword[rdx+0]    ; this should be sufficient to copy
 	    vmovups   xmm1, dqword[rdx+16]   ; up to and including first move of pv
@@ -284,7 +295,7 @@ end if
 		add   rdx, sizeof.RootMove
 		jmp   .copy_moves_loop
 .copy_moves_done:
-		mov   qword[rbx+Thread.rootPos.rootMovesVec.ender], rax
+		mov   qword[rsi+Thread.rootPos.rootMovesVec.ender], rax
 
 		jmp   .next_thread
 .thread_copy_done:

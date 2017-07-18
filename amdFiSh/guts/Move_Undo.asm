@@ -7,31 +7,13 @@ Move_Undo:
 
 	       push   rsi
 
+SD String,"Move_Undo(move="
+SD Move, rcx
+SD NewLine
+
 if DEBUG
 		mov   dword[rbp+Pos.debugDWORD1], ecx
 end if
-
-match=2, VERBOSE {
-		sub   dword[rbp+Pos.gamePly], 1
-	       push   rax rcx rsi rdi
-		mov   esi, ecx
-		lea   rdi, [VerboseOutput]
-		mov   eax, 'udm'
-	      stosd
-                sub   rdi, 1
-	     movsxd   rax, dword[rbp+Pos.gamePly]
-	       call   PrintSignedInteger
-		mov   al, ':'
-	      stosb
-		mov   ecx, esi
-		xor   edx, edx
-	       call   PrintUciMove
-		mov   al, '|'
-	      stosb
-		lea   rcx, [VerboseOutput]
-	       call   _WriteOut
-		pop   rdi rsi rcx rax
-}
 
 		mov   esi, dword[rbp+Pos.sideToMove]
 		xor   esi, 1
@@ -64,12 +46,11 @@ match=2, VERBOSE {
 		cmp   ecx, MOVE_TYPE_PROM
 		jae   .Special
 
-if PEDANTIC
 	      movzx   eax, byte[rbp+Pos.pieceIdx+r9]
 		mov   byte[rbp+Pos.pieceList+rax], r8l
 		mov   byte[rbp+Pos.pieceIdx+r8], al
 		mov   eax, r11d 		; save a copy of captured piece
-end if
+
 		and   r11d, 7
 		jnz   .Captured
 
@@ -86,13 +67,12 @@ end if
 		btr   rdx, r8
 		 or   qword[rbp+Pos.typeBB+8*r11], rdx
 		 or   qword[rbp+Pos.typeBB+8*rsi], rdx
-if PEDANTIC
+
 	      movzx   ecx, byte[rbp+Pos.pieceEnd+rax]
 		mov   byte[rbp+Pos.pieceIdx+r9], cl
 		mov   byte[rbp+Pos.pieceList+rcx], r9l
 		add   ecx, 1
 		mov   byte[rbp+Pos.pieceEnd+rax], cl
-end if
 
 if DEBUG
 		jmp   Move_Undo_Check
@@ -106,12 +86,12 @@ end if
 		xor   edx, edx
 		cmp   ecx, MOVE_TYPE_EPCAP
 		 ja   .Castle
-if PEDANTIC
+
 	      movzx   eax, byte[rbp+Pos.pieceIdx+r9]
 		mov   byte[rbp+Pos.pieceList+rax], r8l
 		mov   byte[rbp+Pos.pieceIdx+r8], al
 		mov   eax, r11d 		; save a copy of captured piece
-end if
+
 		 je   .EpCapture
 
 .Prom:
@@ -124,7 +104,6 @@ end if
 		mov   byte[rbp+Pos.board+r8], al
 		mov   byte[rbp+Pos.board+r9], r11l
 
-if PEDANTIC
 	       push   rdi
 		lea   ecx, [8*rsi+rcx]
 	      movzx   edi, byte[rbp+Pos.pieceEnd+rcx]
@@ -143,7 +122,6 @@ if PEDANTIC
 		mov   byte[rbp+Pos.pieceEnd+8*rsi+Pawn], dl
 		mov   eax, r11d
 		pop   rdi
-end if
 
 
 		xor   edx, edx
@@ -161,13 +139,11 @@ end if
 		 or   qword[rbp+Pos.typeBB+8*r11], rdx
 		 or   qword[rbp+Pos.typeBB+8*rsi], rdx
 
-if PEDANTIC
 	      movzx   ecx, byte[rbp+Pos.pieceEnd+rax]
 		mov   byte[rbp+Pos.pieceIdx+r9], cl
 		mov   byte[rbp+Pos.pieceList+rcx], r9l
 		add   ecx, 1
 		mov   byte[rbp+Pos.pieceEnd+rax], cl
-end if
 
 if DEBUG
 		jmp   Move_Undo_Check
@@ -188,13 +164,12 @@ end if
 		 or   qword[rbp+Pos.typeBB+8*rsi], rdx
 		mov   byte[rbp+Pos.board+r9], 0
 		mov   byte[rbp+Pos.board+rcx], r11l
-if PEDANTIC
+
 	      movzx   eax, byte[rbp+Pos.pieceEnd+r11]
 		mov   byte[rbp+Pos.pieceIdx+rcx], al
 		mov   byte[rbp+Pos.pieceList+rax], cl
 		add   eax, 1
 		mov   byte[rbp+Pos.pieceEnd+r11], al
-end if
 
 if DEBUG
 		jmp   Move_Undo_Check
@@ -230,7 +205,6 @@ end if
 		mov   byte[rbp+Pos.board+r8], r10l
 		mov   byte[rbp+Pos.board+r9], r11l
 
-if PEDANTIC
 	       push   rdi
 	  ;    movzx   eax, byte[rbp+Pos.pieceIdx+rcx]
 	  ;    movzx   edi, byte[rbp+Pos.pieceIdx+rdx]
@@ -263,7 +237,6 @@ if PEDANTIC
 		mov   byte[rbp+Pos.pieceIdx+r9], r11l
 		mov   byte[rbp+Pos.pieceIdx+r10], dil
 		pop   rdi
-end if
 
 		mov   rax, qword[rbp+Pos.typeBB+8*rsi]
 		mov   r10, qword[rbp+Pos.typeBB+8*King]
@@ -301,12 +274,12 @@ Move_Undo_Check:
 		lea   rdi,[DebugOutput]
 		mov   rax, 'UndoMove'
 	      stosq
-PrintNewLine
+       PrintNewLine
 		mov   ecx, dword[rbp+Pos.debugDWORD1]
 		xor   edx, edx
 	       call   PrintUciMoveLong
-PrintNewLine
+       PrintNewLine
 		lea   rdi, [DebugOutput]
 	       call   _ErrorBox
-int3
+               int3
 }

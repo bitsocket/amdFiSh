@@ -77,12 +77,10 @@ struct EvalInfo
  kingAttackersCount  rd 2
  kingAttackersWeight rd 2
  kingAdjacentZoneAttacksCount rd 2
- ksq			      rd 2
- me   rq 1
- pi   rq 1
  score	   rd 1
 	   rd 1
- _mobility rd 2  ; not used anymore
+ me   rq 1
+ pi   rq 1
 ends
 
 struct EndgameMapEntry
@@ -124,11 +122,11 @@ ends
 struct Pos
  typeBB      rq 8
  board	     rb 64
-match =1, PEDANTIC {		; absolute index means not relative to the type of piece in piece list
+                                ; absolute index means not relative to the type of piece in piece list
  pieceIdx    rb 64		; pieceIdx[Square s] gives the absolute index of the piece on square s in pieceList
  pieceEnd    rb 16		; pieceEnd[Piece p] gives the absolute index of the SQ_NONE terminator in pieceList for type p
  pieceList   rb 16*16		; pieceList[Piece p][16] is a SQ_NONE-terminated array of squares for piece p
-}
+
  sideToMove  rd 1
 	     rd 1
  gamePly     rd 1
@@ -256,6 +254,11 @@ struct Options
  syzygy50MoveRule rb 1	    ; bool 0 or -1
  syzygyProbeDepth rd 1
  syzygyProbeLimit rd 1
+match =1, USE_VARIETY {
+ varietyMod   rd 1
+ varietyBound rd 1
+              rq 1
+}
  hashPath	rq 1
  hashPathSizeB	rq 1
  hashPathBuffer rq 14
@@ -365,6 +368,10 @@ struct Thread
 		  rb 1
  nodes		rq 1
  tbHits 	rq 1
+match =1, USE_VARIETY {
+ randSeed     rq 1
+              rq 1
+}
  idx		rd 1
  rootDepth	rd 1
 

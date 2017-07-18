@@ -93,9 +93,9 @@ szGreeting:
 	db VERSION_PRE
 	db VERSION_OS
 	db ' '
-	db VERSION_POST
-	db ' '
 	create_build_time DAY, MONTH, YEAR
+	db ' '
+	db VERSION_POST
 	NewLineData
 szGreetingEnd:
 	db 'id author Zodiac'
@@ -154,6 +154,11 @@ if USE_WEAKNESS
 	db 'option name UCI_LimitStrength type check default false'
 	NewLineData
 	db 'option name UCI_Elo type spin default 1000 min 0 max 3300'
+	NewLineData
+end if
+
+if USE_VARIETY
+	db 'option name Variety type spin default 0 min 0 max 40'
 	NewLineData
 end if
 
@@ -261,6 +266,10 @@ end if
 if USE_WEAKNESS
 sz_uci_limitstrength	db 'uci_limitstrength',0
 sz_uci_elo		db 'uci_elo',0
+end if
+
+if USE_VARIETY
+sz_variety              db 'variety',0
 end if
 
 if USE_BOOK
@@ -500,7 +509,7 @@ DoMaterialEval_Data:
 .QuadraticOurs:            rd 8*6
 .QuadraticTheirs:          rd 8*6
 PawnsSet                   rd 16
-
+QueenMinorsImbalance       rd 16
 
 
 ;;;;;;;;;;;;;; data for endgames ;;;;;;;;;;;;;;

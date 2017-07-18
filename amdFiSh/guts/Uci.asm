@@ -20,7 +20,10 @@ Options_Init:
 		mov   rax, '<empty>'
 		mov   qword[rdx+Options.hashPath], rcx
 		mov   qword[rcx], rax
-
+if USE_VARIETY
+                mov   dword[rdx+Options.varietyMod], 1
+                mov   dword[rdx+Options.varietyBound], 0
+end if
 		ret
 
 
@@ -583,10 +586,7 @@ UciParseMoves:
 		mov   ecx, edi
 		mov   byte[rbx+State.givesCheck], al
 	       call   Move_Do__UciParseMoves
-	; when VERBOSE<>2, domove/undomove don't update gamePly
-if VERBOSE <> 2
 		inc   dword[rbp+Pos.gamePly]
-end if
 		mov   qword[rbp+Pos.state], rbx
 	       call   SetCheckInfo
 		jmp   .get_move
@@ -777,6 +777,14 @@ if USE_WEAKNESS
 		lea   rcx, [sz_uci_elo]
 	       call   CmpStringCaseless
 		lea   rbx, [.UciElo]
+	       test   eax, eax
+		jnz   .CheckValue
+end if
+
+if USE_VARIETY
+		lea   rcx, [sz_variety]
+	       call   CmpStringCaseless
+		lea   rbx, [.Variety]
 	       test   eax, eax
 		jnz   .CheckValue
 end if
@@ -1057,6 +1065,20 @@ if USE_WEAKNESS
 		jmp   UciGetInput
 end if
 
+if USE_VARIETY
+.Variety:
+	       call   ParseInteger
+      ClampUnsigned   eax, 0, 40
+                lea   ecx, [rax+1]
+                mov   dword[options.varietyMod], ecx
+                mov   ecx, -PawnValueEg
+               imul   ecx
+                mov   ecx, 100
+               idiv   ecx
+                mov   dword[options.varietyBound], eax
+		jmp   UciGetInput
+end if
+
 
 ;;;;;;;;;;;;
 ; *extras*
@@ -1218,6 +1240,7 @@ end if
 .nextpos:
 		add   r13d, 1
 	       call   SkipSpaces
+                xor   ecx, ecx
 	       call   Position_ParseFEN
 		lea   rcx, [UciLoop.limits]
 	       call   Limits_Init

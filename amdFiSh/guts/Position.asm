@@ -68,7 +68,7 @@ Position_SetState:
 		add   rsp, 64
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
-if PEDANTIC
+
 Position_SetPieceLists:
 	; in: rbp Position
 	; out: set index, pieceCount, pieceList members in some fixed order
@@ -119,8 +119,6 @@ irps c, White Black {
 
 		pop   rdi rsi rbx
 		ret
-
-end if
 
 
 if DEBUG
@@ -206,7 +204,6 @@ Position_VerifyState:
 		pop   r15 r14 r13 r12 rdi rsi rbx
 		ret
 
- if PEDANTIC
 Position_VerifyPieceLists:
 	; in:  rbp  address of Pos
 	; out: eax =  0 if piece lists match bitboards, which are assumed to be correct
@@ -266,8 +263,6 @@ Position_VerifyPieceLists:
 		xor   eax, eax
 		pop   rdi rsi rbx
 		ret
-
- end if
 
 end if
 
@@ -439,12 +434,11 @@ if DEBUG
 	       call   Position_VerifyState
 	       test   eax, eax
 		jz   .Failed
- if PEDANTIC
+
 	; make sure piece lists are ok
 	       call   Position_VerifyPieceLists
 	       test   eax, eax
 		 jz   .Failed
- end if
 end if
 
 		xor   eax, eax
@@ -534,7 +528,6 @@ end virtual
 	       call   PrintBitboardCompact
        PrintNewLine
 
-if PEDANTIC
 	     szcall   PrintString, 'pieceIdx:  '
 		xor   esi, esi
 	.1:    test   esi, 7
@@ -609,7 +602,6 @@ if PEDANTIC
 		 jb   .3
        PrintNewLine
 
-end if
 
 
 	     szcall   PrintString, 'checkers:  '
@@ -1020,9 +1012,7 @@ Position_ParseFEN:
 		mov   dword[rbp+Pos.gamePly], eax
 
 	       call   Position_SetState
-if PEDANTIC
 	       call   Position_SetPieceLists
-end if
 	       call   Position_IsLegal
 	       test   eax,eax
 		jnz   .Failed
